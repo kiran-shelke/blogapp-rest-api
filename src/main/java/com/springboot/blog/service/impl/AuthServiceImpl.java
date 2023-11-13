@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         Role userRole=roleRepository.findByName(registerDto.getRole());
         if(userRole==null)
         {
-            userRole=checkIfRoleExist(registerDto);
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Kindly assign proper role");
         }
         roles.add(userRole);
         user.setRoles(roles);
@@ -77,9 +77,5 @@ public class AuthServiceImpl implements AuthService {
         return "User registered successfully..!!";
     }
 
-    private Role checkIfRoleExist(RegisterDto registerDto) {
-        Role saveRole=new Role();
-        saveRole.setName(String.valueOf(ERole.valueOf(registerDto.getRole())));
-        return roleRepository.save(saveRole);
-    }
+
 }

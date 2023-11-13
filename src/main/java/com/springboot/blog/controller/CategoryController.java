@@ -2,6 +2,8 @@ package com.springboot.blog.controller;
 
 import com.springboot.blog.payload.CategoryDto;
 import com.springboot.blog.service.CategoryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(
+        name = "CRUD REST APIs for category resource"
+)
 public class CategoryController {
     private CategoryService categoryService;
 
@@ -19,6 +24,9 @@ public class CategoryController {
     }
 
     //build add category rest api - http://localhost:8080/api/categories
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> addCategory(@RequestBody CategoryDto categoryDto)
@@ -28,6 +36,9 @@ public class CategoryController {
     }
 
     //get category rest api- http://localhost:8080/api/categories/1
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     @GetMapping("{id}")
     public ResponseEntity<CategoryDto> getCategory(@PathVariable("id") Long categoryId)
     {
@@ -36,6 +47,9 @@ public class CategoryController {
     }
 
     //get all categories rest api- http://localhost:8080/api/categories
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getCategories()
     {
@@ -43,6 +57,9 @@ public class CategoryController {
     }
 
     //update category rest api- http://localhost:8080/api/categories/1
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,
@@ -52,6 +69,9 @@ public class CategoryController {
     }
 
     //build delete category rest api- http://localhost:8080/api/categories/1
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId)
