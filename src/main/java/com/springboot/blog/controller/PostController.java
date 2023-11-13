@@ -146,4 +146,21 @@ public class PostController {
         List<PostDto> postDtos=postService.getPostsByCategory(categoryId);
         return ResponseEntity.ok(postDtos);
     }
+
+    @Operation(
+            summary = "Search the post using input query",
+            description = "It is used to get all post from database according to search input"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Http Status 200 SUCCESS"
+    )
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
+    @GetMapping("/search")
+    public ResponseEntity<List<PostDto>> searchPosts(@RequestParam("query") String query)
+    {
+        return ResponseEntity.ok(postService.searchPosts(query));
+    }
 }

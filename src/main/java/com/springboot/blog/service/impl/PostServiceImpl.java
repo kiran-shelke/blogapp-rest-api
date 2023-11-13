@@ -2,6 +2,7 @@ package com.springboot.blog.service.impl;
 
 import com.springboot.blog.entity.Category;
 import com.springboot.blog.entity.Post;
+import com.springboot.blog.exception.BlogAPIException;
 import com.springboot.blog.exception.ResourceNotFoundException;
 import com.springboot.blog.payload.PostDto;
 import com.springboot.blog.payload.PostResponse;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -109,6 +111,15 @@ public class PostServiceImpl implements PostService {
 
         List<Post> posts=postRepository.findByCategoryId(categoryId);
         return posts.stream().map((post)->mapper.map(post,PostDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDto> searchPosts(String query) {
+       List<Post> posts= postRepository.searchPost(query);
+       if (posts.isEmpty())
+          throw new BlogAPIException(HttpStatus.BAD_REQUEST,"No such Post available");
+       else
+        return posts.stream().map(post->mapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
 
     //convert DTO to entity
